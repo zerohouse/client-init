@@ -1,0 +1,23 @@
+{
+  "name": "anb",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "~1.4.7",
+    "angular-essential": "*"
+  },
+  "homepage": "https://github.com/zerohouse/anb",
+  "authors": [
+    "dev <parksungho86@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
