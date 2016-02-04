@@ -220,130 +220,130 @@ module.exports = function (grunt) {
             options: {
                 blockReplacements: {
                     js: (block) => {
-                    var scripts = [];
-    block.src.forEach((src)=> {
-        if (src.startsWith("//"))
-    scripts.push(getScript(src));
-});
-    scripts.push(getScript(block.dest));
-    return scripts.join(require('os').EOL);
+                        var scripts = [];
+                        block.src.forEach((src)=> {
+                            if (src.startsWith("//"))
+                                scripts.push(getScript(src));
+                        });
+                        scripts.push(getScript(block.dest));
+                        return scripts.join(require('os').EOL);
 
-    function getScript(input) {
-        return '<script src="' + input + '"></script>';
-    }
-}
-}
-}
-},
-
-    imagemin: {
-        dist: {
-            files: [{
-                expand: true,
-                cwd: '<%= config.app %>/resources',
-                src: '{,*/}*.{png,jpg,jpeg,gif}',
-                dest: '<%= config.dist %>/resources'
-            }]
-        }
-    },
-
-    svgmin: {
-        dist: {
-            files: [{
-                expand: true,
-                cwd: '<%= config.app %>/resources',
-                src: '{,*/}*.svg',
-                dest: '<%= config.dist %>/resources'
-            }]
-        }
-    },
-
-    includeSource: {
-        options: {
-            basePath: '<%= config.app %>',
-                baseUrl: '/'
-        },
-        templates: {
-            html: {
-                js: '<script src="{filePath}"></script>',
-                    css: '<link rel="stylesheet" type="text/css" href="{filePath}" />'
+                        function getScript(input) {
+                            return '<script src="' + input + '"></script>';
+                        }
+                    }
+                }
             }
         },
-        myTarget: {
-            files: {
-                'app/index.html': 'app/index.html'
-            }
-        }
-    },
 
-    ngtemplates: {
-        dist: {
+        imagemin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= config.app %>/resources',
+                    src: '{,*/}*.{png,jpg,jpeg,gif}',
+                    dest: '<%= config.dist %>/resources'
+                }]
+            }
+        },
+
+        svgmin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= config.app %>/resources',
+                    src: '{,*/}*.svg',
+                    dest: '<%= config.dist %>/resources'
+                }]
+            }
+        },
+
+        includeSource: {
             options: {
-                prefix: '/',
-                    module: '<%= config.ngModule %>'
+                basePath: '<%= config.app %>',
+                baseUrl: '/'
             },
-            cwd: '<%= config.app %>',
+            templates: {
+                html: {
+                    js: '<script src="{filePath}"></script>',
+                    css: '<link rel="stylesheet" type="text/css" href="{filePath}" />'
+                }
+            },
+            myTarget: {
+                files: {
+                    'app/index.html': 'app/index.html'
+                }
+            }
+        },
+
+        ngtemplates: {
+            dist: {
+                options: {
+                    prefix: '/',
+                    module: '<%= config.ngModule %>'
+                },
+                cwd: '<%= config.app %>',
                 src: ['**/*.html', '!index.html'],
                 dest: '<%= config.app %>/template.js'
-        }
-    },
-
-    ngAnnotate: {
-        dist: {
-            files: [{
-                expand: true,
-                cwd: '.tmp/concat/scripts',
-                src: '*.js',
-                dest: '.tmp/concat/scripts'
-            }]
-        }
-    },
-
-    cdnify: {
-        options: {
-            cdn: require('next-cdn')
+            }
         },
-        app: {
-            html: ['<%= config.app %>/*.html']
-        }
-    },
 
-    copy: {
-        dist: {
-            files: [{
-                expand: true,
-                dot: true,
-                cwd: '<%= config.app %>',
-                dest: '<%= config.dist %>',
-                src: [
-                    'resources/**/*.*',
-                    'index.html'
-                ]
-            }]
-        }
-    },
+        ngAnnotate: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '.tmp/concat/scripts',
+                    src: '*.js',
+                    dest: '.tmp/concat/scripts'
+                }]
+            }
+        },
 
-    concurrent: {
-        server: [
-            'less'
-        ],
+        cdnify: {
+            options: {
+                cdn: require('next-cdn')
+            },
+            app: {
+                html: ['<%= config.app %>/*.html']
+            }
+        },
+
+        copy: {
+            dist: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= config.app %>',
+                    dest: '<%= config.dist %>',
+                    src: [
+                        'resources/**/*.*',
+                        'index.html'
+                    ]
+                }]
+            }
+        },
+
+        concurrent: {
+            server: [
+                'less'
+            ],
             test: [
-            'less'
-        ],
+                'less'
+            ],
             dist: [
-            'less',
-            'imagemin',
-            'svgmin'
-        ]
-    },
+                'less',
+                'imagemin',
+                'svgmin'
+            ]
+        },
 
-    karma: {
-        unit: {
-            configFile: 'test/karma.conf.js',
+        karma: {
+            unit: {
+                configFile: 'test/karma.conf.js',
                 singleRun: true
+            }
         }
-    }
-});
+    });
 
 
     grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
