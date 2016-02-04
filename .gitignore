@@ -1,4 +1,7 @@
 
+# CSS 파일 대신 Less
+*.css
+
 # Created by https://www.gitignore.io/api/webstorm,grunt,node,bower
 
 ### WebStorm ###

@@ -1,7 +1,9 @@
 module.exports = function (grunt) {
 
+    // 프로세스 시간 측정
     require('time-grunt')(grunt);
 
+    // Load Npm process 자동화
     require('jit-grunt')(grunt, {
         useminPrepare: 'grunt-usemin',
         ngtemplates: 'grunt-angular-templates',
@@ -12,7 +14,7 @@ module.exports = function (grunt) {
     var config = {
         app: 'app',
         dist: 'dist',
-        ngModule: 'anb'
+        ngModule: 'app'
     };
 
     grunt.initConfig({
@@ -58,6 +60,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // 서버 설정
         connect: {
             options: {
                 port: 9000,
@@ -152,6 +155,7 @@ module.exports = function (grunt) {
             template: '<%= config.app %>/template.js'
         },
 
+        // Bower Dependency Index 파일에 넣기
         wiredep: {
             app: {
                 src: ['<%= config.app %>/index.html'],
@@ -188,6 +192,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // Less 컴파일
         less: {
             src: {
                 expand: true,
@@ -196,6 +201,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // Html 블락에 있는 내용 읽어서 다른 작업 수행함.
         useminPrepare: {
             html: '<%= config.app %>/index.html',
             options: {
@@ -203,7 +209,7 @@ module.exports = function (grunt) {
                 flow: {
                     html: {
                         steps: {
-                            js: ['concat', 'uglifyjs'],
+                            js: ['concat'],
                             css: ['cssmin']
                         },
                         post: {}
@@ -212,12 +218,33 @@ module.exports = function (grunt) {
             }
         },
 
+        // ECMA 6 -> 5로 컴파일
+        babel: {
+            options: {
+                presets: ['es2015']
+            },
+            dist: {
+                files: {
+                    'dist/scripts/scripts.js': 'dist/scripts/scripts.js'
+                }
+            }
+        },
+
+        uglify: {
+            dist: {
+                files: {
+                    'dist/scripts/scripts.js': 'dist/scripts/scripts.js',
+                    'dist/scripts/vendor.js': 'dist/scripts/vendor.js'
+                }
+            }
+        },
 
         usemin: {
             html: ['<%= config.dist %>/{,*/}*.html'],
             css: ['<%= config.dist %>/{,*/}*.css'],
             js: ['<%= config.dist %>/{,*/}*.js'],
             options: {
+                // cdn 된 것들은 유지하고 치환함.
                 blockReplacements: {
                     js: (block) => {
                         var scripts = [];
@@ -258,6 +285,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // 소스파일들 변경시 index.html에 의존성 관계 주입함
         includeSource: {
             options: {
                 basePath: '<%= config.app %>',
@@ -276,6 +304,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // Html들 변환해서 캐시에 넣음
         ngtemplates: {
             dist: {
                 options: {
@@ -288,6 +317,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // ngInject치환함.
         ngAnnotate: {
             dist: {
                 files: [{
@@ -299,6 +329,7 @@ module.exports = function (grunt) {
             }
         },
 
+        // CDN에 있는 내용으로 변환
         cdnify: {
             options: {
                 cdn: require('next-cdn')
@@ -337,6 +368,7 @@ module.exports = function (grunt) {
             ]
         },
 
+        // 테스트 설정
         karma: {
             unit: {
                 configFile: 'test/karma.conf.js',
@@ -346,7 +378,7 @@ module.exports = function (grunt) {
     });
 
 
-    grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
+    grunt.registerTask('serve', 'Compile then start a connect web server', (target)=> {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
@@ -360,11 +392,6 @@ module.exports = function (grunt) {
             'connect:livereload',
             'watch'
         ]);
-    });
-
-    grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-        grunt.task.run(['serve:' + target]);
     });
 
     grunt.registerTask('test', [
@@ -388,8 +415,9 @@ module.exports = function (grunt) {
         'ngAnnotate',
         'copy:dist',
         'cssmin',
-        'uglify',
         'usemin',
+        'babel',
+        'uglify',
         'clean:template'
     ]);
 

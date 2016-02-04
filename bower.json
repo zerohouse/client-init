@@ -1,11 +1,11 @@
 {
-  "name": "anb",
+  "name": "app",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "~1.4.7",
+    "angular": "~1.4.9",
     "angular-essential": "*"
   },
-  "homepage": "https://github.com/zerohouse/anb",
+  "homepage": "https://github.com/zerohouse/?",
   "authors": [
     "dev <parksungho86@gmail.com>"
   ],
