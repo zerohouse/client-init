@@ -38,7 +38,7 @@ module.exports = function (grunt) {
             },
             less: {
                 files: [
-                    '<%= config.app %>/{,*/}*.less'
+                    '<%= config.app %>/**/*.less'
                 ],
                 tasks: ['less', 'includeSource'],
                 options: {
@@ -322,9 +322,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/concat/scripts',
-                    src: '*.js',
-                    dest: '.tmp/concat/scripts'
+                    cwd: 'dist',
+                    src: '**/*.js',
+                    dest: 'dist'
                 }]
             }
         },
@@ -412,11 +412,11 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'concat',
-        'ngAnnotate',
         'copy:dist',
+        'babel',
+        'ngAnnotate',
         'cssmin',
         'usemin',
-        'babel',
         'uglify',
         'clean:template'
     ]);
